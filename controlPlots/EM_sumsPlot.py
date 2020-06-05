@@ -10,7 +10,7 @@ import matplotlib.lines as mlines
 import matplotlib.font_manager as font_manager
 import matplotlib.patches as mpatches
 
-url = 'https://gist.githubusercontent.com/bonanomi/d14780f7562cb2a22fdd753a9d4459d4/raw/034716767493fcfb7852c0c0e4555b86eafbb901/MyMPLStyle'
+url = 'https://gist.githubusercontent.com/bonanomi/d14780f7562cb2a22fdd753a9d4459d4/raw/c8fd6811858458ebb3e0a34f5a3a1a9584bcd7ce/MyMPLStyle'
 
 plt.style.use(url)
 
@@ -27,21 +27,21 @@ for energy, tE in zip(tqdm(energies), true_E):
     esum_data = pd.read_hdf(fname, 's')
 
     fname = obs_dir + 'esum_mc_%i.h5' %energy
-    esum_mc = pd.read_hdf(obs_dir, 's')
+    esum_mc = pd.read_hdf(fname, 's')
 
     binning = np.linspace(np.median(esum_mc)*0.4, np.median(esum_mc)*1.1, 100)
 
     sf = np.median(esum_mc)/np.median(esum_data)
 
-    t = plt.hist(esum_data*sf, binning, density = True, histtype = 'step', color = 'k', label = 'Data') 
-    t = plt.hist(esum_mc, binning, density = True, histtype = 'step', color = 'r', label = 'MC') 
-
     plt.figure(figsize = (6, 4))
     plt.title(r'$\bf{{CMS}}$' ' Preliminary', style = 'italic', loc = 'left', fontsize = 10)
 
-	plt.grid(b = None)
-	plt.legend(fontsize = 10, title = r'$e^+$ %i GeV' %energy, title_fontsize = 12)
-	plt.ylabel(r'a.u.', ha='right', y=1.0, fontsize = 12)
-	plt.xlabel('Reconstructed energy [MIP]', ha='right', x=1.0, fontsize = 12)
-	plt.show()
-	plt.savefig('EM_sum_%i.pdf' %energy, bbox_inches='tight')
+    t = plt.hist(esum_data*sf, binning, density = True, histtype = 'step', color = 'k', label = 'Data') 
+    t = plt.hist(esum_mc, binning, density = True, histtype = 'step', color = 'r', label = 'MC') 
+
+    plt.grid(b = None)
+    plt.legend(fontsize = 10, title = r'$e^+$ %i GeV' %energy, title_fontsize = 12)
+    plt.ylabel(r'a.u.', ha='right', y=1.0, fontsize = 12)
+    plt.xlabel('Reconstructed energy [MIP]', ha='right', x=1.0, fontsize = 12)
+    plt.show()
+    plt.savefig('EM_sum_%i.pdf' %energy, bbox_inches='tight')

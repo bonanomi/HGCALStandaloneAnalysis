@@ -10,7 +10,7 @@ import matplotlib.lines as mlines
 import matplotlib.font_manager as font_manager
 import matplotlib.patches as mpatches
 
-url = 'https://gist.githubusercontent.com/bonanomi/d14780f7562cb2a22fdd753a9d4459d4/raw/034716767493fcfb7852c0c0e4555b86eafbb901/MyMPLStyle'
+url = 'https://gist.githubusercontent.com/bonanomi/d14780f7562cb2a22fdd753a9d4459d4/raw/c8fd6811858458ebb3e0a34f5a3a1a9584bcd7ce/MyMPLStyle'
 
 plt.style.use(url)
 
@@ -29,17 +29,16 @@ for energy, tE in zip(tqdm(energies), true_E):
     fname = obs_dir + 'cog_mc_%i.h5' %energy
     cog_mc = pd.read_hdf(fname, 's')
 
-    binning = np.linspace(6, 15, 50)
-
-    t = plt.hist(cog_data, binning, density = True, histtype = 'step', color = 'k', label = 'Data') 
-    t = plt.hist(cog_mc, binning, density = True, histtype = 'step', color = 'r', label = 'MC') 
+    binning = np.linspace(5, 17, 60)
 
     plt.figure(figsize = (6, 4))
     plt.title(r'$\bf{{CMS}}$' ' Preliminary', style = 'italic', loc = 'left', fontsize = 10)
+    t = plt.hist(cog_data, binning, density = True, histtype = 'step', color = 'k', label = 'Data') 
+    t = plt.hist(cog_mc, binning, density = True, histtype = 'step', color = 'r', label = 'MC') 
 
-	plt.grid(b = None)
-	plt.legend(fontsize = 10, title = r'$e^+$ %i GeV' %energy, title_fontsize = 12)
-	plt.ylabel(r'a.u.', ha='right', y=1.0, fontsize = 12)
-	plt.xlabel('Shower depth [X0]', ha='right', x=1.0, fontsize = 12)
-	plt.show()
-	plt.savefig('EM_cog_%i.pdf' %energy, bbox_inches='tight')
+    plt.grid(b = None)
+    plt.legend(fontsize = 10, title = r'$e^+$ %i GeV' %energy, title_fontsize = 12)
+    plt.ylabel(r'a.u.', ha='right', y=1.0, fontsize = 12)
+    plt.xlabel('Shower depth [X0]', ha='right', x=1.0, fontsize = 12)
+    plt.show()
+    plt.savefig('EM_cog_%i.pdf' %energy, bbox_inches='tight')

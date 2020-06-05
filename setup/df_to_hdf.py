@@ -12,5 +12,6 @@ if not isdir:
     os.mkdir(path_hdf)
 
 for energy in energies:
-    prepareHDF(energy, isMC = False, outdir = path_hdf)
+	prepareHDF(energy, outdir = path_hdf)
+    prepareHDF(energy, inInj = True, outdir = path_hdf)
     prepareHDF(energy, isMC = True, outdir = path_hdf)

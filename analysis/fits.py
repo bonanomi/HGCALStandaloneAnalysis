@@ -56,8 +56,14 @@ def Longo_fcn(z, a, w, b):
     '''
     return a*z**w*np.exp(-b*z)
 
-def line(x, m, q):
+def fit_line(x, m, q):
     return m*x + q
+
+def logE(x, Ec):
+    return np.log(x/Ec) - 0.5
+
+def logE_cog(x, Ec):
+    return 1.5 + np.log(x/Ec)
 
 def repeatedGausFit(histogram, energy, weights = [], drawFit=False, c = 'k', rangeInSigmaLeft = 1., rangeInSigmaRight = 2.5):
     Sampl = 2.198e-01
@@ -106,3 +112,27 @@ def repeatedGausFit(histogram, energy, weights = [], drawFit=False, c = 'k', ran
      plt.plot(xdraw, gaussian(xdraw, popt[0], popt[1],  popt[2]), '--', linewidth=2.0, color = c)
 
     return resolution, error, e_reco, E_err, sigma, chi2
+
+def showerMaxFit(x, y):
+    popt, pcov = curve_fit(showerShape, x, y)
+    alpha = popt[0]
+    beta = popt[1]
+    ers = np.sqrt(np.diag(pcov))
+    err_alpha = ers[0]
+    err_beta = ers[1]
+
+    tmax = (alpha-1)/beta
+    err_tmax = err_prop(alpha-1, beta, err_alpha, err_beta)
+    return tmax, err_tmax
+
+def cogFit(x, y):
+    popt, pcov = curve_fit(showerShape, x, y)
+    alpha = popt[0]
+    beta = popt[1]
+    ers = np.sqrt(np.diag(pcov))
+    err_alpha = ers[0]
+    err_beta = ers[1]
+
+    cog = alpha/beta
+    err_cog = err_prop(alpha, beta, err_alpha, err_beta)
+    return cog, err_cog

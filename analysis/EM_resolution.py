@@ -13,8 +13,14 @@ import matplotlib.patches as mpatches
 from scipy.optimize import curve_fit
 
 from fits import *
+from plt_helper import *
 
-url = 'https://gist.githubusercontent.com/bonanomi/d14780f7562cb2a22fdd753a9d4459d4/raw/034716767493fcfb7852c0c0e4555b86eafbb901/MyMPLStyle'
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--inj", type=bool, help="", default=False, required=False)
+
+args = parser.parse_args()
+isInj = args.inj
 
 plt.style.use(url)
 
@@ -23,56 +29,69 @@ true_E   = np.array([20, 30, 49.99, 79.93, 99.83, 119.20, 149.14, 197.32, 243.61
 
 obs_dir = '../data/'
 
-reso_dt = []; reso_mc = []
-mip_dt  = []; mip_mc  = []
+reso_dt = []; reso_mc = []; reso_inj = []
+err_reso_dt = []; err_reso_mc = []; err_reso_inj = []
+mip_dt  = []; mip_mc  = []; mip_inj = []
+err_mip_dt = []; err_mip_mc = []; err_mip_inj = []
 
 for energy, tE in zip(tqdm(energies), true_E):
     fname = obs_dir + 'esum_data_%i.h5' %energy
     esum_data = pd.read_hdf(fname, 's')
     res = repeatedGausFit(esum_data, tE)
     reso_dt.append(res[0]); mip_dt.append(res[2])
-    
+    err_reso_dt.append(res[1]); err_mip_dt.append(res[3])
+
+    if isInj:
+        fname = obs_dir + 'esum_data_inj_%i.h5' %energy
+        esum_inj = pd.read_hdf(fname, 's')
+        res = repeatedGausFit(esum_inj, tE)
+        reso_inj.append(res[0]); mip_inj.append(res[2])
+        err_reso_inj.append(res[1]); err_mip_inj.append(res[3])
+
     fname = obs_dir + 'esum_mc_%i.h5' %energy
-    esum_mc = pd.read_hdf(obs_dir, 's')
+    esum_mc = pd.read_hdf(fname, 's')
     res = repeatedGausFit(esum_mc, tE)
     reso_mc.append(res[0]); mip_mc.append(res[2])
+    err_reso_mc.append(res[1]); err_mip_mc.append(res[3])
 
+reso_dt = np.array(reso_dt); reso_mc = np.array(reso_mc); reso_inj = np.array(reso_inj)
+err_reso_dt = np.array(err_reso_dt); err_reso_mc = np.array(err_reso_mc); err_reso_inj = np.array(err_reso_inj)
+mip_dt  = np.array(mip_dt); mip_mc  = np.array(mip_mc); mip_inj = np.array(mip_inj)
+err_mip_dt = np.array(err_mip_dt); err_mip_mc = np.array(err_mip_mc); err_mip_inj = np.array(err_mip_inj)
 
 ##############
 ## Plotting ##
 ##############
 
-draw_e = np.linspace(15, 300, 1000)
+#### EM Resolution ####
 
 plt.figure(figsize = (6, 4))
-plt.title(r'$\bf{{CMS}}$' ' Preliminary', style = 'italic', loc = 'left', fontsize = 10)
-plt.plot(true_E, reso_dt, 'k.', label = 'Data')
-popt, pcov = curve_fit(resolution, true_E, reso_dt)
-sc_dt = popt[0]*1e2; cons_dt = popt[1]*1e2
-err_sc_dt = np.sqrt(np.diag(pcov))[0]*1e2; err_const_dt = np.sqrt(np.diag(pcov))[1]*1e2
-plt.plot(draw_e, resolution(draw_e, *popt), '--', color = 'k')
 
-plt.plot(true_E, reso_mc, marker = 's', mfc = 'None', 
-             color = 'r', linestyle = 'None', label = 'MC')
-popt, pcov = curve_fit(resolution, true_E, reso_mc)
-sc_mc = popt[0]*1e2; cons_mc = popt[1]*1e2
-err_sc_mc = np.sqrt(np.diag(pcov))[0]*1e2; err_const_mc = np.sqrt(np.diag(pcov))[1]*1e2
-plt.plot(draw_e, resolution(draw_e, *popt), '--', color = 'r')
+### Data
+p_dt, l_dt = plotReso(reso_dt, err_reso_dt)
 
-k_dot = mlines.Line2D([], [], color='k', marker='o',alpha = 0.8, 
-                          markersize=3.5, label='Data')
-k_line = mlines.Line2D([], [], color='k', marker='None', mfc = 'None', linestyle = '-.',
-                          markersize=3.5, 
-label = r'S = %.2f $\pm$ %.2f $\sqrt{GeV}$ %%' '\n' r'C = %.2f $\pm$ %.2f %%' %(sc_dt, err_sc_dt, cons_dt, err_const_dt))
+### Injection data
+if isInj:
+    p_inj, l_inj = plotReso(reso_inj, err_reso_inj, isInj = isInj)
 
-red_dot = mlines.Line2D([], [], color='red', marker='o', mfc = 'None',
-                          markersize=3.5, label= 'MC v3')
-red_line = mlines.Line2D([], [], color='red', marker='None', mfc = 'None', linestyle = '-.',
-                          markersize=3.5, 
-label = r'S = %.2f $\pm$ %.2f $\sqrt{GeV}$ %%' '\n' r'C = %.2f $\pm$ %.2f %%' %(sc_mc, err_sc_mc, cons_mc, err_const_mc))
+### Simulation
+p_mc, l_mc = plotReso(reso_mc, err_reso_mc, isMC = True)
 
-plt.legend(handles=[red_dot, red_line, k_dot, k_line], fontsize = 8)
-plt.ylabel(r'Gaussian $\frac{\sigma_{E}}{\left\langle E\right\rangle}$', ha='right', y=1.0, fontsize = 12)
-plt.xlabel('E beam [GeV]', ha='right', x=1.0, fontsize = 12)
+if isInj:
+    plt.legend(handles=[p_mc, l_mc, p_dt, l_dt, p_inj, l_inj], fontsize = 8)
+else:
+    plt.legend(handles=[p_mc, l_mc, p_dt, l_dt], fontsize = 8)
+
 plt.show()
 plt.savefig('resolution.pdf', bbox_inches='tight')
+
+#### EM Linearity ####
+plt.figure(figsize = (6, 4))
+### Data
+p_dt, l_dt = plotLinearity(mip_dt, err_mip_dt)
+### Simulation
+p_mc, l_mc = plotLinearity(mip_mc, err_mip_mc, isMC = True)
+plt.legend(handles=[p_mc, l_mc, p_dt, l_dt], fontsize = 8)
+
+plt.show()
+plt.savefig('linearity.pdf', bbox_inches='tight')

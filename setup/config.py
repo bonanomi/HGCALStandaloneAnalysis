@@ -18,6 +18,7 @@ runs = {
 
 data_prefix = '/eos/cms/store/group/dpg_hgcal/tb_hgcal/2018/cern_h2_october/offline_analysis/ntuples/v16/'
 sim_prefix  = '/eos/cms/store/group/dpg_hgcal/tb_hgcal/2018/cern_h2_october/offline_analysis/sim_ntuples/CMSSW11_0_withAHCAL_newBeamline/FTFP_BERT_EMN/v3/electrons/'
+inj_prefix  = '/eos/cms/store/group/dpg_hgcal/tb_hgcal/2018/cern_h2_october/offline_analysis/ntuples/injectionCalib_v4_patch0/'
 path_hdf = '/eos/user/m/mbonanom/SWAN_projects/HGC-PulseFit/HGCAL TB 2018 Analysis/HDF_Analysis/'
 
 energies = np.array([20, 30, 50, 80, 100, 120, 150, 200, 250, 300])

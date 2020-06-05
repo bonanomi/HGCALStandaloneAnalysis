@@ -13,8 +13,7 @@ import matplotlib.patches as mpatches
 from scipy.optimize import curve_fit
 
 from fits import *
-
-url = 'https://gist.githubusercontent.com/bonanomi/d14780f7562cb2a22fdd753a9d4459d4/raw/034716767493fcfb7852c0c0e4555b86eafbb901/MyMPLStyle'
+from plt_helper import *
 
 plt.style.use(url)
 
@@ -48,8 +47,8 @@ plt.plot(true_E, cg_mc, marker = 's', mfc = 'None',
              color = 'r', linestyle = 'None', label = 'MC')
 
 plt.grid(b = None)
-plt.legend(fontsize = 8)
-plt.ylabel(r'$\left\langle COG_z\right\rangle$', ha='right', y=1.0, fontsize = 12)
+plt.legend(fontsize = 10)
+plt.ylabel(r'$\left\langle COG_z\right\rangle$ [X0]', ha='right', y=1.0, fontsize = 12)
 plt.xlabel('E beam [GeV]', ha='right', x=1.0, fontsize = 12)
 plt.show()
 plt.savefig('cog_average.pdf', bbox_inches='tight')

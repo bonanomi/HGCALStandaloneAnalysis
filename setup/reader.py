@@ -82,7 +82,7 @@ def do_df(run, location, mc_range = 0, isMC=False, withDWC=True, h3_esum = False
 
     return df_sel
 
-def prepareHDF(energy, isMC=False, outdir='./'):
+def prepareHDF(energy, isInj=False, isMC=False, outdir='./'):
     dfs = []
     if isMC:
         runs_id = range(5)
@@ -92,15 +92,18 @@ def prepareHDF(energy, isMC=False, outdir='./'):
         runs_id = runs[energy]
         prefix = data_prefix
         hdf_name = 'data_%i.h5' %energy
+        if isInj:
+            prefix = inj_prefix
+            hdf_name = 'data_inj_%i.h5' %energy
 
     fout = outdir + hdf_name
 
     for run in tqdm(runs_id):
         try:
             if isMC:
-                df_tmp = do_df(energy, sim_prefix, mc_range = run, isMC = isMC)
+                df_tmp = do_df(energy, prefix, mc_range = run, isMC = isMC)
             else:
-                df_tmp = do_df(energy, data_prefix)
+                df_tmp = do_df(run, prefix)
             dfs.append(df_tmp)
         except:
             continue
