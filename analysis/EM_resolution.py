@@ -1,4 +1,5 @@
 import uproot
+import os.path
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -63,6 +64,12 @@ err_mip_dt = np.array(err_mip_dt); err_mip_mc = np.array(err_mip_mc); err_mip_in
 ## Plotting ##
 ##############
 
+plots_dir = '../plots/'
+isdir = os.path.isdir(plots_dir) 
+if not isdir: 
+  print('Directory {} does not exist. Creating it.' .format(plots_dir))  
+    os.mkdir(plots_dir)
+
 #### EM Resolution ####
 
 plt.figure(figsize = (6, 4))
@@ -83,7 +90,7 @@ else:
     plt.legend(handles=[p_mc, l_mc, p_dt, l_dt], fontsize = 8)
 
 plt.show()
-plt.savefig('resolution.pdf', bbox_inches='tight')
+plt.savefig(plots_dir + 'resolution.pdf', bbox_inches='tight')
 
 #### EM Linearity ####
 plt.figure(figsize = (6, 4))
@@ -94,4 +101,10 @@ p_mc, l_mc = plotLinearity(mip_mc, err_mip_mc, isMC = True)
 plt.legend(handles=[p_mc, l_mc, p_dt, l_dt], fontsize = 8)
 
 plt.show()
-plt.savefig('linearity.pdf', bbox_inches='tight')
+plt.savefig(plots_dir + 'linearity.pdf', bbox_inches='tight')
+
+#### EM Linearity ratio ####
+plotLinearitySF(mip_dt, err_mip_dt, mip_mc, err_mip_mc)
+plt.show()
+plt.savefig(plots_dir + 'linearitySF.pdf', bbox_inches='tight')
+

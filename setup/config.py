@@ -13,13 +13,13 @@ runs = {
     150: [493, 494, 495, 496, 501, 502, 503, 504, 505, 506, 507, 508, 509],
     200: [664, 665, 666, 667, 671, 672, 673, 674, 675, 676],
     250: [645, 646, 647, 648, 649, 650, 652, 653, 654], 
-    300: [425, 424, 425, 426, 429, 431, 435]
+    300: [425, 426, 429, 431, 435]
 }
 
 data_prefix = '/eos/cms/store/group/dpg_hgcal/tb_hgcal/2018/cern_h2_october/offline_analysis/ntuples/v16/'
 sim_prefix  = '/eos/cms/store/group/dpg_hgcal/tb_hgcal/2018/cern_h2_october/offline_analysis/sim_ntuples/CMSSW11_0_withAHCAL_newBeamline/FTFP_BERT_EMN/v3/electrons/'
 inj_prefix  = '/eos/cms/store/group/dpg_hgcal/tb_hgcal/2018/cern_h2_october/offline_analysis/ntuples/injectionCalib_v4_patch0/'
-path_hdf = '/eos/user/m/mbonanom/SWAN_projects/HGC-PulseFit/HGCAL TB 2018 Analysis/HDF_Analysis/'
+path_hdf    = '/data_CMS_upgrade/bonanomi/HDF_Analysis/'
 
 energies = np.array([20, 30, 50, 80, 100, 120, 150, 200, 250, 300])
 true_E   = np.array([20, 30, 49.99, 79.93, 99.83, 119.20, 149.14, 197.32, 243.61, 287.18])

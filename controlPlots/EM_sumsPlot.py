@@ -1,4 +1,5 @@
 import uproot
+import os.path
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -17,7 +18,12 @@ plt.style.use(url)
 energies = np.array([20, 30, 50, 80, 100, 120, 150, 200, 250, 300])
 true_E   = np.array([20, 30, 49.99, 79.93, 99.83, 119.20, 149.14, 197.32, 243.61, 287.18])
 
-obs_dir = '../data/'
+obs_dir   = '../data/'
+plots_dir = '../plots/'
+isdir = os.path.isdir(plots_dir) 
+if not isdir: 
+  print('Directory {} does not exist. Creating it.' .format(plots_dir))  
+    os.mkdir(plots_dir)
 
 reso_dt = []; reso_mc = []
 mip_dt  = []; mip_mc  = []
@@ -44,4 +50,4 @@ for energy, tE in zip(tqdm(energies), true_E):
     plt.ylabel(r'a.u.', ha='right', y=1.0, fontsize = 12)
     plt.xlabel('Reconstructed energy [MIP]', ha='right', x=1.0, fontsize = 12)
     plt.show()
-    plt.savefig('EM_sum_%i.pdf' %energy, bbox_inches='tight')
+    plt.savefig(plots_dir + 'EM_sum_%i.pdf' %energy, bbox_inches='tight')

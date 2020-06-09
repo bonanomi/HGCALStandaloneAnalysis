@@ -88,6 +88,26 @@ def plotLinearity(mip, err, isMC = False, isInj = False):
 
     return dot, line
 
+def plotLinearitySF(mip_dt, err_dt, mip_mc, err_mc):
+    ratios = mip_mc/mip_dt
+
+    fig = plt.figure(figsize=(6,5))
+    frame1=fig.add_axes((.1,.3,.8,.6))
+    plt.title(r'$\bf{{CMS}}$' ' Preliminary', style = 'italic', loc = 'left', fontsize = 10)
+    plt.errorbar(true_E, mip_dt, yerr = err_dt, marker = 'o', color = 'k', linestyle = 'None', label = 'Data', markersize = 3.0)
+    plt.errorbar(true_E, mip_mc, yerr = err_mc, marker='s', mfc='None', color = 'r', linestyle= 'None', label = 'MC', markersize = 3.0)
+    plt.ylabel('Reconstructed energy [MIP]', fontsize = 12, ha='right', y=1.0)
+    plt.legend(fontsize = 12, loc = 2)
+    plt.grid(b = None)
+    frame1.set_xticklabels([]) #Remove x-tic labels for the first frame
+    frame2=fig.add_axes((.1,.1,.8,.2)) 
+    plt.errorbar(true_E, ratios**(-1), yerr = np.sqrt((0.02*(ratios**-1))**2), marker = 'o', linestyle = 'None', color = 'k', markersize = 3.0)
+    plt.xlabel('E beam [GeV]', ha='right', x=1.0, fontsize = 12)
+    plt.axhline(y = np.median(ratios**-1), linestyle = '--', color = 'r', label = 'SF = %.2f' %np.median(ratios))
+    plt.ylabel('Data / Sim.', fontsize = 12, ha='right', y=1.0)
+    plt.grid()
+    # plt.legend()
+    plt.ylim(0.8, 1.)
 
 def plotShowerMax(tmax, err, isMC = False, isInj = False):
     plt.title(r'$\bf{{CMS}}$' ' Preliminary', style = 'italic', loc = 'left', fontsize = 10)

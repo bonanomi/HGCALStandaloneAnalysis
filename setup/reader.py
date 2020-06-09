@@ -12,7 +12,7 @@ def do_df(run, location, mc_range = 0, isMC=False, withDWC=True, h3_esum = False
 
     dwc_branches = [u'ntracks', 'dwcReferenceType', 'b_x', 'b_y'] 
     rh_branches = [branch for branch in branches if 'rechit' in branch]
-    xcorr = - 3.6 + 2. #x MC
+    xcorr = - 3.6 + 2.7 #x MC
     ycorr = + 2.6 - 1.0 #y MC
     
     fname = location + 'ntuple_%i.root' %run
@@ -68,16 +68,15 @@ def do_df(run, location, mc_range = 0, isMC=False, withDWC=True, h3_esum = False
     sel = abs(df_sel.b_x) < 1.0
     sel &= abs(df_sel.b_y) < 1.0
     sel &= (df_sel.rechit_layer < 29)
-    if not isMC:
-        sel &= (df_sel[(df_sel.rechit_layer>28) & (df_sel.rechit_layer<=40)].groupby('event').rechit_layer.size() < 80)
+    if isMC:
+        sel &= (df_sel.ahc_energySum == 0)
+
+    sel &= (df_sel[(df_sel.rechit_layer>28) & (df_sel.rechit_layer<=40)].groupby('event').rechit_layer.size() < 50)
 
     esum_tot = df_sel.groupby('event').rechit_energy.sum()
     esum_EE = df_sel[df_sel.rechit_layer < 29].groupby('event').rechit_energy.sum()
     cut = esum_EE/esum_tot > 0.95
 
-    if isMC: 
-        sel &= (df_sel.ahc_energySum == 0)
-    
     df_sel = df_sel[sel & cut].copy()
 
     return df_sel

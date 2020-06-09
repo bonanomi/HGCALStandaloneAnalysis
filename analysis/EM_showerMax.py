@@ -1,4 +1,5 @@
 import uproot
+import os.path
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -56,6 +57,12 @@ cog_mc = np.array(cog_mc); err_cog_mc = np.array(err_cog_mc)
 ## Plotting ##
 ##############
 
+plots_dir = '../plots/'
+isdir = os.path.isdir(plots_dir) 
+if not isdir: 
+  print('Directory {} does not exist. Creating it.' .format(plots_dir))  
+    os.mkdir(plots_dir)
+
 ### Shower max from fit
 
 plt.figure(figsize = (6, 4))
@@ -66,7 +73,7 @@ p_mc, l_mc = plotShowerMax(tmax_mc, err_tmax_mc, isMC = True)
 plt.legend(handles=[p_mc, l_mc, p_dt, l_dt], fontsize = 8)
 
 plt.show()
-plt.savefig('tmax.pdf', bbox_inches='tight')
+plt.savefig(plots_dir + 'tmax.pdf', bbox_inches='tight')
 
 
 ### Average COGz from fit
@@ -79,4 +86,4 @@ p_mc, l_mc = plotCOGFit(cog_mc, err_cog_mc, isMC = True)
 plt.legend(handles=[p_mc, l_mc, p_dt, l_dt], fontsize = 8)
 
 plt.show()
-plt.savefig('cogz_from_fit.pdf', bbox_inches='tight')
+plt.savefig(plots_dir + 'cogz_from_fit.pdf', bbox_inches='tight')
