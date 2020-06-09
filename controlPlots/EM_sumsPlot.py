@@ -22,7 +22,7 @@ obs_dir   = '../data/'
 plots_dir = '../plots/'
 isdir = os.path.isdir(plots_dir) 
 if not isdir: 
-  print('Directory {} does not exist. Creating it.' .format(plots_dir))  
+    print('Directory {} does not exist. Creating it.' .format(plots_dir))  
     os.mkdir(plots_dir)
 
 reso_dt = []; reso_mc = []

@@ -17,7 +17,7 @@ outdir = '../data/'
 
 isdir = os.path.isdir(outdir) 
 if not isdir: 
-	print('Directory {} does not exist. Creating it.' .format(outdir))  
+    print('Directory {} does not exist. Creating it.' .format(outdir))  
     os.mkdir(outdir)
 
 for energy in tqdm(energies):

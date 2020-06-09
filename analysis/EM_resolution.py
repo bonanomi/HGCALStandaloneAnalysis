@@ -67,7 +67,7 @@ err_mip_dt = np.array(err_mip_dt); err_mip_mc = np.array(err_mip_mc); err_mip_in
 plots_dir = '../plots/'
 isdir = os.path.isdir(plots_dir) 
 if not isdir: 
-  print('Directory {} does not exist. Creating it.' .format(plots_dir))  
+    print('Directory {} does not exist. Creating it.' .format(plots_dir))  
     os.mkdir(plots_dir)
 
 #### EM Resolution ####

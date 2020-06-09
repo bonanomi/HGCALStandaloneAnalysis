@@ -13,9 +13,6 @@ import matplotlib.patches as mpatches
 
 from scipy.optimize import curve_fit
 
-from fits import *
-from plt_helper import *
-
 url = 'https://gist.githubusercontent.com/bonanomi/d14780f7562cb2a22fdd753a9d4459d4/raw/c8fd6811858458ebb3e0a34f5a3a1a9584bcd7ce/MyMPLStyle'
 
 plt.style.use(url)
@@ -27,7 +24,7 @@ obs_dir = '../data/'
 plots_dir = '../plots/'
 isdir = os.path.isdir(plots_dir) 
 if not isdir: 
-  print('Directory {} does not exist. Creating it.' .format(plots_dir))  
+    print('Directory {} does not exist. Creating it.' .format(plots_dir))  
     os.mkdir(plots_dir)
 
 tmax_dt = []; err_tmax_dt = []
